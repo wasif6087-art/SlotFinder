@@ -62,6 +62,267 @@ The MVP will not include:
 - Mobile application
 - Automatic appointment booking
 
+## Data Models
+
+### WatchRequest
+
+- id
+- email
+- appointmentType
+- advisorPreference
+- active
+- createdAt
+
+### AppointmentSlot
+
+- id
+- advisorName
+- appointmentType
+- appointmentDateTime
+- detectedAt
+- source
+
+### Notification
+
+- id
+- watchRequestId
+- appointmentSlotId
+- email
+- sentAt
+- status
+
+
+## User Flow
+
+Student visits SlotFinder
+
+↓
+
+Student enters email address
+
+↓
+
+Student selects appointment type
+(Virtual or In-Person)
+
+↓
+
+Student selects advisor preference
+(Specific Advisor or Any Advisor)
+
+↓
+
+Student submits watch request
+
+↓
+
+SlotFinder stores the request
+
+↓
+
+SlotFinder monitors appointment availability
+
+↓
+
+Matching appointment becomes available
+
+↓
+
+SlotFinder sends email notification
+
+↓
+
+Student receives notification
+
+↓
+
+Student manually books appointment
+
+↓
+
+Student stops monitoring
+
+## System Flow
+
+Watch Request Submitted
+
+↓
+
+Store WatchRequest in Database
+
+↓
+
+Scheduler Runs Periodically
+
+↓
+
+Check Advising Website
+
+↓
+
+Extract Available Appointments
+
+↓
+
+Create AppointmentSlot Records
+
+↓
+
+Compare Appointments Against Watch Requests
+
+↓
+
+Matching Appointment Found
+
+↓
+
+Create Notification Record
+
+↓
+
+Send Email
+
+↓
+
+Update Notification Status
+
+## MVP Screens
+
+### 1. Landing Page
+
+
+SlotFinder
+
+Find advising appointments without refreshing all day.
+
+[ Email ]
+
+Appointment Type:
+( ) Virtual
+( ) In-Person
+
+Advisor Preference:
+( ) Any Advisor
+( ) Specific Advisor
+
+If Specific:
+[ Advisor Name ]
+
+[ Start Monitoring ]
+
+---
+
+### 2. Success Page
+
+Success!
+
+SlotFinder is now monitoring appointments for you.
+
+Notifications will be sent to:
+
+wasif@email.com
+
+[ Create Another Watch Request ]
+
+---
+
+### 3. Email Sent (Not a page, user just recieves this email)
+
+Subject:
+Appointment Available
+
+Hi,
+
+A matching advising appointment has been found.
+
+Advisor: Jane Doe
+Date: June 14
+Time: 2:30 PM
+Type: Virtual
+
+Book now at:
+[ UBC Advising Link ]
+
+No longer need notifications?
+
+[ Stop Monitoring ]
+
+---
+
+### 4. Stop Monitoring Page
+
+Stop Monitoring?
+
+You will no longer receive
+appointment notifications.
+
+Email:
+wasif@gmail.com
+
+[ Stop Monitoring ]
+
+[ Keep Monitoring ]
+
+----
+
+### 5. Stop Confirmation Page
+
+Monitoring Stopped
+
+You will no longer receive
+appointment notifications.
+
+Thank you for using SlotFinder.
+
+
+## Tech Stack
+
+### Frontend
+
+* React
+* JavaScript
+* HTML
+* CSS
+
+### Backend
+
+* Java
+* Spring Boot
+
+### Database
+
+* PostgreSQL
+
+### Version Control
+
+* Git
+* GitHub
+
+### Email Notifications
+
+* SendGrid (TBD)
+
+### Deployment
+
+* Render or Railway (TBD)
+* AWS (Future Enhancement)
+
+## Architecture
+
+Frontend (React) ->
+Backend (Spring Boot) ->
+Database (PostgreSQL) 
+
+The frontend communicates with the backend through REST APIs. The backend handles logic, appointment monitoring, notification processing, and data persistence. PostgreSQL stores application data such as: watch requests, appointment slots, and notification records.
+
+
+
+
+
+
+
+
+
 
 
 
