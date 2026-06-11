@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.slotfinder.backend.services.WatchRequestService;
+import org.springframework.web.bind.annotation.GetMapping;
+import java.util.List;
+
+
 
 
 @RestController
@@ -25,5 +29,11 @@ public class WatchRequestController {
 
             return watchRequestService.createWatchRequest(request);
         }
-    
-}
+
+    @GetMapping("/watchrequests") 
+        public List<WatchRequest> getAllWatchRequests() {
+            return watchRequestService.getAllWatchRequests();
+        }
+
+}    
+
