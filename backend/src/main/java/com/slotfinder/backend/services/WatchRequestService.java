@@ -34,8 +34,16 @@ public class WatchRequestService {
         return watchRequests;
     } 
 
+    public String cancelWatchRequest(Long id) {
+        for (WatchRequest request : watchRequests) {
+            if (request.getId().equals(id)) {
+                request.setActive(false);
+                return "Watch request has been cacelled for " + request.getEmail();
+            } 
+        }
 
-
-
+    
+        return "No watch request found";
+    }
 
 }

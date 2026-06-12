@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.slotfinder.backend.services.WatchRequestService;
 import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 
@@ -34,6 +37,11 @@ public class WatchRequestController {
         public List<WatchRequest> getAllWatchRequests() {
             return watchRequestService.getAllWatchRequests();
         }
+
+    @PutMapping("/watchrequests/{id}/stop")
+    public String cancelWatchRequest(@PathVariable Long id) {
+        return watchRequestService.cancelWatchRequest(id);
+    }
 
 }    
 
