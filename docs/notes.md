@@ -84,3 +84,23 @@ Instead:
 Browser → API Request → Backend Server → JSON Response → UI
 
 For backend development and scraping tasks, inspecting network requests is often more useful than inspecting webpage HTML.
+
+
+
+Design note: (what infor do we take from OUR users?)
+
+We do not need to collect academic intake fields because Slot Finder only detects availability, not booking details.
+
+We do need appointment mode because Phone/Zoom and In-person appear to have different availability pools, likely represented by different Comm100 serviceIds.
+
+Next investigation:
+Find In-person appointment serviceId by inspecting Network requests after clicking Book In-Person Appointment.
+
+
+Advisor behavior:
+- If user searches "All Available", appointmentSlot.advisorName may be "Unknown" because Comm100 availability response only returns dates/times.
+- If user selects a specific advisor, inspect whether Comm100 request includes an advisor/agent parameter.
+- If yes, set advisorName to the selected advisor.
+- Future API idea:
+  /appointments/check?mode=zoom&advisor=all
+  /appointments/check?mode=zoom&advisor=Dia

@@ -18,7 +18,7 @@ public class AppointmentCheckerController {
     }
 
     @GetMapping("/appointments/check")
-    public List<AppointmentSlot> checkForAppointments() {
+    public List<AppointmentSlot> checkForAppointments() throws Exception {
         return appointmentCheckerService.checkForAppointments();
     }
 
