@@ -10,6 +10,8 @@ public class AppointmentSlot {
 
     private LocalDateTime appointmentDateTime;
 
+    private AppointmentType appointmentType;
+
     private LocalDateTime detectedAt;
 
     private String source;
@@ -54,5 +56,11 @@ public class AppointmentSlot {
         this.source = source;
     }
 
-   
+    public AppointmentType getAppointmentType() {
+        return appointmentType;
     }
+
+    public void setAppointmentType(AppointmentType appointmentType) {
+        this.appointmentType = appointmentType;
+    }
+}
