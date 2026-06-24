@@ -33,4 +33,20 @@ public class ServiceAgentService {
         );
     }
 
+    public String getAdvisorNameByAgentId(String agentId) throws Exception {
+        
+    List<ServiceAgent> serviceAgents = getServiceAgents();
+
+    for (ServiceAgent serviceAgent : serviceAgents) {
+        if (serviceAgent.getId().equals(agentId)) {
+            return serviceAgent.getDisplayName();
+        }
+    }
+
+    return "Unknown";
 }
+
+
+
+}
+

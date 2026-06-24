@@ -1,4 +1,4 @@
-package com.slotfinder.backend.contollers;
+package com.slotfinder.backend.controllers;
 
 import com.slotfinder.backend.models.WatchRequest;
 

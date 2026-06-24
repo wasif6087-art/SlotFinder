@@ -1,4 +1,4 @@
-package com.slotfinder.backend.contollers;
+package com.slotfinder.backend.controllers;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

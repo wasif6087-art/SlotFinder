@@ -1,4 +1,4 @@
-package com.slotfinder.backend.contollers;
+package com.slotfinder.backend.controllers;
 
 import java.util.List;
 
@@ -23,4 +23,5 @@ public class ServiceAgentController {
     public List<ServiceAgent> getServiceAgents() throws Exception {
         return serviceAgentService.getServiceAgents();
     }
+
 }
