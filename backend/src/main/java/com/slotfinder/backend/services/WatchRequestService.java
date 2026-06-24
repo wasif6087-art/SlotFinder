@@ -1,42 +1,37 @@
 package com.slotfinder.backend.services;
-import com.slotfinder.backend.models.WatchRequest;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
-import com.slotfinder.backend.models.AppointmentType;
 import com.slotfinder.backend.models.AppointmentSlot;
+import com.slotfinder.backend.models.WatchRequest;
 
 @Service
 public class WatchRequestService {
 
     private List<WatchRequest> watchRequests = new ArrayList<>();
     private Long nextId = 1L;
+
     private final AppointmentCheckerService appointmentCheckerService;
     private final ServiceAgentService serviceAgentService;
 
     public WatchRequestService(
-        AppointmentCheckerService appointmentCheckerService, 
-        ServiceAgentService serviceAgentService
+            AppointmentCheckerService appointmentCheckerService, 
+            ServiceAgentService serviceAgentService
     ) {
         this.appointmentCheckerService = appointmentCheckerService;
         this.serviceAgentService = serviceAgentService;
     }
-    
 
     public String createWatchRequest(WatchRequest request) {
-
         request.setId(nextId);
         nextId++;
 
         request.setActive(true);
-
         request.setCreatedAt(LocalDateTime.now());
-
 
         watchRequests.add(request);
 
@@ -55,7 +50,6 @@ public class WatchRequestService {
             } 
         }
 
-    
         return "No watch request found";
     }
 
@@ -70,7 +64,8 @@ public class WatchRequestService {
     }
 
     public List<AppointmentSlot> findMatches(WatchRequest request) throws Exception {
-        if (request.getAgentId() != null) {
+        if (request.getAgentId() != null &&
+                !request.getAgentId().isBlank()) {
             String advisorName = serviceAgentService.getAdvisorNameByAgentId(
                     request.getAgentId()
             );
@@ -86,5 +81,4 @@ public class WatchRequestService {
                 request.getAppointmentType()
         );
     }
-
 }

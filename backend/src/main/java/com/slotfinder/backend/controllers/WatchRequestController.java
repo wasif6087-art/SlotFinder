@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class WatchRequestController {
 
@@ -23,7 +25,7 @@ public class WatchRequestController {
 
     @PostMapping("/watchrequests")
     public String createWatchRequest(
-            @RequestBody WatchRequest request
+            @Valid @RequestBody WatchRequest request
     ) {
         return watchRequestService.createWatchRequest(request);
     }

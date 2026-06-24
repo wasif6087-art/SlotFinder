@@ -1,8 +1,12 @@
 package com.slotfinder.backend.models;
 import java.time.LocalDateTime;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 public class WatchRequest {
 
+    @Email
+    @NotBlank
     private String email;
     
     private AppointmentType appointmentType;
