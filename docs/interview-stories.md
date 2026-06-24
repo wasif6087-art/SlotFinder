@@ -220,3 +220,77 @@ By validating assumptions at each stage of the pipeline, I was able to identify 
 
 ---
 
+## Story 3: Extending an Existing API Design Without Duplicating Endpoints
+
+Date: June 24, 2026
+
+Problem
+
+While building SlotFinder, I initially implemented appointment retrieval only for PHONE_ZOOM appointments.
+
+The backend integration was working correctly, but after investigating the UBC advising system further, I discovered that the booking platform also supported IN_PERSON appointments through a different Comm100 service ID.
+
+My first instinct was to create separate endpoints and separate service logic for each appointment type.
+
+However, this would have duplicated a large amount of code because both appointment types followed the exact same workflow.
+
+Investigation
+
+Using Chrome DevTools and the Comm100 API responses, I compared the Phone/Zoom and In-Person booking flows.
+
+I verified that:
+
+* Both appointment types used the same Comm100 endpoint structure.
+* Both returned appointment availability in the same JSON format.
+* Both supported advisor-specific filtering through agent IDs.
+* The only meaningful difference was the Comm100 service ID used in the request.
+
+This suggested that the underlying retrieval logic was identical and that appointment type should be treated as input data rather than a separate implementation.
+
+Solution
+
+Instead of creating duplicate endpoints and service methods, I introduced an AppointmentType enum containing:
+
+* PHONE_ZOOM
+* IN_PERSON
+
+I then refactored the appointment retrieval pipeline so that appointment type became a parameter that flowed through the application.
+
+The implementation included:
+
+* Creating centralized service ID selection logic.
+* Passing AppointmentType through controller request parameters.
+* Updating service methods to accept AppointmentType as an argument.
+* Removing hardcoded Phone/Zoom behavior.
+* Updating AppointmentSlot objects to record the selected appointment type.
+
+I also verified the implementation through Swagger.
+
+Because AppointmentType was implemented as an enum, Swagger automatically generated a dropdown menu containing the valid appointment types, reducing invalid input and improving API usability.
+
+Result
+
+The same API endpoint could now support both PHONE_ZOOM and IN_PERSON appointments without duplicating business logic.
+
+The final design allowed requests such as:
+
+* PHONE_ZOOM appointment retrieval
+* IN_PERSON appointment retrieval
+* Advisor-specific PHONE_ZOOM retrieval
+* Advisor-specific IN_PERSON retrieval
+
+all through the same underlying appointment retrieval pipeline.
+
+This made the codebase simpler, easier to maintain, and easier to extend if additional appointment types are introduced in the future.
+
+Lessons Learned
+
+A useful API design principle is to parameterize behavior when the workflow is identical and only a small piece of data changes.
+
+Instead of creating multiple nearly identical implementations, it is often cleaner to expose the difference as an input parameter and keep the business logic centralized.
+
+This reduces duplication, improves maintainability, and makes future enhancements significantly easier.
+
+---
+
+

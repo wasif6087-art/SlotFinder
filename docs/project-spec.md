@@ -317,7 +317,60 @@ The frontend communicates with the backend through REST APIs. The backend handle
 
 
 
+## Technical Roadmap / Depth Plan
 
+SlotFinder is not intended to remain a simple CRUD application.
+
+The project should evolve into a real appointment monitoring system with the following technical layers:
+
+### 1. Core Backend Logic
+
+- Retrieve live appointment availability from Comm100
+- Support virtual and in-person appointment types
+- Support all-advisor and advisor-specific availability
+- Match active WatchRequests against available AppointmentSlots
+
+### 2. Monitoring System
+
+- Add a scheduler that runs periodically
+- Check all active watch requests automatically
+- Detect when matching appointments become available
+- Handle external API failures gracefully
+
+### 3. Notification System
+
+- Create a Notification model
+- Send email alerts when matching appointments are found
+- Record notification status
+- Prevent duplicate notifications for the same appointment slot
+
+### 4. Persistence
+
+- Store WatchRequests in PostgreSQL
+- Store detected AppointmentSlots in PostgreSQL
+- Store sent Notifications in PostgreSQL
+- Replace in-memory storage with database-backed repositories
+
+### 5. User Control
+
+- Allow users to stop monitoring
+- Add unsubscribe/stop-monitoring links in emails
+- Ensure stopped watch requests no longer trigger notifications
+
+### 6. Deployment
+
+- Deploy backend service
+- Deploy frontend service
+- Connect deployed app to PostgreSQL
+- Configure environment variables for external API and email credentials
+
+### 7. Optional Future Enhancements
+
+- Authentication and user accounts
+- Dashboard for managing watch requests
+- Date/time preference filtering
+- Observability/logging for monitoring cycles
+- Cloud deployment on AWS
 
 
 

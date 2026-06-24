@@ -5,9 +5,11 @@ public class WatchRequest {
 
     private String email;
     
-    private String appointmentType;
+    private AppointmentType appointmentType;
 
     private String advisorPreference;
+
+    private String agentId;
 
     private Long id;
 
@@ -24,11 +26,11 @@ public class WatchRequest {
         this.email = email;
     }
 
-    public String getAppointmentType() {
+    public AppointmentType getAppointmentType() {
         return appointmentType;
     }
 
-    public void setAppointmentType(String appointmentType) {
+    public void setAppointmentType(AppointmentType appointmentType) {
         this.appointmentType = appointmentType;
     }
 
@@ -38,6 +40,14 @@ public class WatchRequest {
 
     public void setAdvisorPreference(String advisorPreference) {
         this.advisorPreference = advisorPreference;
+    }
+
+    public String getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
     }
 
     public void setId(Long id) {
