@@ -293,4 +293,65 @@ This reduces duplication, improves maintainability, and makes future enhancement
 
 ---
 
+## Story 4: Designing Flexible Matching Logic Without Duplicating Code
+
+Date: June 24, 2026
+
+Problem
+
+While building SlotFinder, I added a Watch Request feature that allows users to be notified when an appointment matching their preferences becomes available.
+
+Initially, my matching logic only handled advisor-specific requests. If a watch request included an advisor ID, the system correctly returned appointments for that advisor.
+
+However, users should also be able to request:
+
+* Any advisor + Phone/Zoom
+* Any advisor + In Person
+* Specific advisor + Phone/Zoom
+* Specific advisor + In Person
+
+My original implementation did not support the “any advisor” scenario correctly.
+
+Investigation
+
+Rather than creating separate matching methods for each combination, I looked at the existing appointment retrieval services.
+
+I realized that I already had two reusable pieces of functionality:
+
+* A method that retrieves appointments for a specific advisor.
+* A method that retrieves all available appointments for an appointment type.
+
+The matching service only needed to decide which method to call.
+
+Solution
+
+I updated the matching logic to treat the presence of an advisor ID as a routing decision.
+
+If an advisor ID is provided:
+
+* Look up the advisor name from the agent ID.
+* Call the advisor-specific appointment retrieval method.
+
+Otherwise:
+
+* Call the existing method that returns all appointments for the requested appointment type.
+
+This kept the matching logic small while reusing existing services instead of duplicating appointment retrieval code.
+
+Result
+
+The Watch Request feature now supports all four matching scenarios:
+
+* Phone/Zoom with any advisor
+* Phone/Zoom with a specific advisor
+* In Person with any advisor
+* In Person with a specific advisor
+
+The entire flow was verified through Swagger by creating watch requests and confirming that the matching endpoint returned the expected appointment slots.
+
+Lessons Learned
+
+When adding new functionality, it is often better to compose existing services than to create new implementations.
+
+By treating advisor selection as a routing decision rather than creating separate matching algorithms, I avoided duplicated business logic and kept the design easier to maintain.
 
