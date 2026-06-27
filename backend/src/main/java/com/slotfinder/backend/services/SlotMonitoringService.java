@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.slotfinder.backend.models.WatchRequest;
 import com.slotfinder.backend.models.AppointmentSlot;
-import com.slotfinder.backend.models.Notifications;
+import com.slotfinder.backend.models.Notification;
 
 @Service
 public class SlotMonitoringService {
@@ -30,7 +30,7 @@ public class SlotMonitoringService {
 
             for (AppointmentSlot appointmentSlot : matches) {
 
-                Notifications notification =
+                Notification notification =
                     notificationsService.createNotification(
                             request.getEmail(),
                             appointmentSlot

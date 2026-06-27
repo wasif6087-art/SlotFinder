@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.slotfinder.backend.models.Notifications;
+import com.slotfinder.backend.models.Notification;
 import com.slotfinder.backend.services.NotificationsService;
 
 @RestController
@@ -18,7 +18,7 @@ public class NotificationsController {
     }
 
     @GetMapping("/notifications")
-    public List<Notifications> getAllNotifications() {
+    public List<Notification> getAllNotifications() {
         return notificationsService.getAllNotifications();
     }
 }

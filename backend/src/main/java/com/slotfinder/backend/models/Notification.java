@@ -2,7 +2,7 @@ package com.slotfinder.backend.models;
 import java.time.LocalDateTime;
 
 
-public class Notifications {
+public class Notification {
 
     private String email;
 
