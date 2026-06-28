@@ -8,6 +8,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 
 import com.slotfinder.backend.models.AppointmentSlot;
+import com.slotfinder.backend.models.AppointmentType;
+
+import java.time.format.DateTimeFormatter;
 
 
 @Service
@@ -27,14 +30,29 @@ public void sendAppointmentNotification(
 ){ 
     SimpleMailMessage message = new SimpleMailMessage();
 
+    DateTimeFormatter formatter = 
+        DateTimeFormatter.ofPattern("EEEE, MMMM d, yyyy 'at' h:mm a");
+
+    String formattedDateTime = 
+        appointmentSlot.getAppointmentDateTime().format(formatter);        
+
+    String formattedAppointmentType;
+
+    if (appointmentSlot.getAppointmentType() == AppointmentType.PHONE_ZOOM){
+        formattedAppointmentType = "Phone / Zoom";
+    } else {
+        formattedAppointmentType = "In-person";
+    }
+
     message.setTo(email);
     message.setSubject("Slot Finder: Appointment Available");
     message.setText(
-        "A matching appointment is available!\n\n"
-            + "Advsior: " + appointmentSlot.getAdvisorName() + "\n"
-            + "Time: " + appointmentSlot.getAppointmentDateTime() + "\n"
-            + "Type: " + appointmentSlot.getAppointmentType() + "\n\n"
-            + "Please book it as soon as possible."
+        "🎓 SlotFinder Appointment Found!\n\n"
+            + "Advsior: " + appointmentSlot.getAdvisorName() + "\n\n"
+            + "Time: " + formattedDateTime + "\n\n"
+            + "Type: " + formattedAppointmentType + "\n\n"
+            + "Please book before someone else takes it!\n\n"
+            + "- SlotFinder"
 
 
     );

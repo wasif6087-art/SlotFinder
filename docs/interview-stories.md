@@ -355,3 +355,46 @@ When adding new functionality, it is often better to compose existing services t
 
 By treating advisor selection as a routing decision rather than creating separate matching algorithms, I avoided duplicated business logic and kept the design easier to maintain.
 
+---
+
+## Story 5: Designing an Email Notification System with Future Extensibility
+
+Date: June 28, 2026
+
+Problem
+
+While implementing SlotFinder's email notification feature, I needed to choose how the backend would send emails.
+
+I considered integrating directly with SendGrid because it is commonly used in production systems and offers features such as analytics, templates, and high-volume email delivery.
+
+However, integrating SendGrid would introduce additional complexity including API keys, account setup, and provider-specific implementation details before the core notification system had even been validated.
+
+Decision
+
+Instead of optimizing for production infrastructure immediately, I chose to implement the notification pipeline using Spring Mail with Gmail SMTP.
+
+Rather than allowing the rest of the application to communicate directly with Gmail, I introduced a dedicated EmailService abstraction.
+
+The application only knows about:
+
+emailService.sendAppointmentNotification(...)
+
+The EmailService is responsible for the underlying delivery mechanism.
+
+This separates the business logic from the email provider.
+
+Result
+
+The notification pipeline was completed and successfully delivered real appointment emails through Gmail SMTP.
+
+More importantly, the rest of the application is completely independent of the email provider.
+
+In the future, Gmail SMTP can be replaced with SendGrid, AWS SES, or another provider by modifying only the EmailService implementation without changing the rest of the application.
+
+Lessons Learned
+
+A useful engineering principle is to optimize architecture before optimizing infrastructure.
+
+By introducing an abstraction layer first, it becomes much easier to replace external technologies later without affecting the rest of the system.
+
+This allowed me to ship a working MVP quickly while preserving flexibility for future production improvements.

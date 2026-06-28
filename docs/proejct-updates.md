@@ -180,3 +180,197 @@ Next Major Milestones
 3. Prevent duplicate notifications from being sent.
 4. Persist notifications and watch requests using a database.
 5. Add frontend support for managing watch requests and notifications.
+
+---
+
+Project Update — Email Notifications (Spring Mail)
+
+Session Goal
+
+Implement the email notification system so that SlotFinder can send real appointment notifications to users via email.
+
+What We Accomplished
+
+1. Chose Email Technology
+
+* Decided to use Spring Mail + Gmail SMTP instead of SendGrid for the MVP.
+* Reasoning:
+    * Simpler setup.
+    * Less infrastructure.
+    * Good enough for development and testing.
+    * Can later swap Gmail SMTP for SendGrid without changing the application architecture.
+
+2. Added Spring Mail
+
+* Added the spring-boot-starter-mail dependency to pom.xml.
+
+3. Configured Gmail SMTP
+
+* Created a dedicated Gmail account for SlotFinder:
+    * slotfinder.ubc@gmail.com
+* Enabled Google 2-Step Verification.
+* Generated a Gmail App Password for Spring Boot.
+* Configured SMTP settings inside application.properties.
+
+4. Implemented EmailService
+
+Created a new EmailService responsible for sending appointment notification emails.
+
+The service:
+
+* receives the user’s email address
+* receives an AppointmentSlot
+* builds an email using SimpleMailMessage
+* sends the email using Spring’s JavaMailSender
+
+This keeps all email-related logic isolated inside one service.
+
+5. Connected NotificationsService
+
+Injected EmailService into NotificationsService.
+
+Whenever a notification is created, the notification service now immediately calls:
+
+emailService.sendAppointmentNotification(...)
+
+This establishes the application flow:
+
+Slot Monitoring
+→ NotificationsService
+→ EmailService
+→ Gmail SMTP
+→ User Inbox
+
+6. Built Temporary Test Controller
+
+Created a temporary EmailController exposing:
+
+GET /test-email
+
+This endpoint creates a fake appointment and sends a test email.
+
+Purpose:
+
+* verify SMTP configuration
+* verify Spring Mail integration
+* test email formatting
+
+This controller is temporary and will be removed once the real notification pipeline is complete.
+
+7. Successfully Sent First Email
+
+Successfully sent the first real email through Gmail SMTP.
+
+Verified:
+
+* Spring Mail configuration
+* Gmail authentication
+* SMTP connection
+* Email delivery
+* End-to-end backend integration
+
+This is the first feature that communicates with an external production service over the internet.
+
+Architecture After This Session
+
+WatchRequest
+
+↓
+
+SlotMonitoringService
+
+↓
+
+NotificationsService
+
+↓
+
+EmailService
+
+↓
+
+Spring Mail
+
+↓
+
+Gmail SMTP
+
+↓
+
+User Inbox
+
+Engineering Concepts Learned
+
+* Spring Mail
+* SMTP
+* Gmail App Passwords
+* Dependency Injection
+* Service-to-Service communication
+* Spring configuration using application.properties
+* External service integration
+* Constructor injection
+* Building service-layer architecture
+
+Next Session Goals
+
+## Next Session Goals (Target: ~4 hours)
+
+### Phase 1 — Finish the Notification System (≈2 hours)
+
+#### 1. Improve email formatting
+- Format appointment date/time using `DateTimeFormatter`
+- Convert enum values (e.g. `PHONE_ZOOM`) into user-friendly text
+- Improve email layout and wording
+- Make notification emails look polished and production-ready
+
+#### 2. Prevent duplicate notifications
+- Ensure the same appointment cannot trigger multiple emails
+- Design and implement duplicate detection
+- Skip notifications that have already been sent
+
+#### 3. Improve backend logging
+- Replace simple print statements with meaningful logs
+- Log watch request processing
+- Log appointment matching
+- Log email sending success/failure
+- Log notification creation
+
+#### 4. Clean up the notification flow
+- Remove the temporary `EmailController`
+- Remove all testing-only code
+- Ensure emails are only sent through the real SlotMonitoringService workflow
+
+✅ Milestone:
+**Notification System Complete**
+
+---
+
+### Phase 2 — Start the Scheduling System (≈2 hours)
+
+#### 5. Build the scheduling infrastructure
+- Learn Spring Scheduling (`@EnableScheduling`, `@Scheduled`)
+- Create a scheduler that runs automatically
+- Execute `SlotMonitoringService.checkAllWatchRequests()` on a fixed interval
+- Verify the monitoring loop runs without manual intervention
+
+#### 6. End-to-end testing
+- Confirm the scheduler automatically checks watch requests
+- Confirm matching appointments trigger notifications
+- Confirm emails are sent without manually calling an endpoint
+
+✅ Milestone:
+**Automatic Appointment Monitoring Complete**
+
+---
+
+June 28, 2026
+
+Completed automatic monitoring system.
+
+- Added Spring Scheduling (@EnableScheduling)
+- Built ScheduledMonitoringService
+- Monitoring now runs automatically every 60 seconds
+- Prevented duplicate notifications
+- Improved email formatting
+- Successfully tested end-to-end
+

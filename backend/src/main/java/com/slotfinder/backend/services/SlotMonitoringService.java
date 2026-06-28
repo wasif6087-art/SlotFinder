@@ -36,7 +36,11 @@ public class SlotMonitoringService {
                             appointmentSlot
                 );
 
-                System.out.println("Notification created for " + notification.getEmail());
+                if (notification == null) {
+                    System.out.println("Duplicate notification skipped for " + request.getEmail());
+                } else {
+                    System.out.println("Notification created for " + notification.getEmail());
+                }
             }
         }
     }

@@ -104,3 +104,10 @@ Advisor behavior:
 - Future API idea:
   /appointments/check?mode=zoom&advisor=all
   /appointments/check?mode=zoom&advisor=Dia
+
+  ---
+
+  Remember before deploying -
+  1. delete test email controller 
+  2. replace Gmail SMTP with SendGrid
+  3. Maybe improve data logging?

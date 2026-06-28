@@ -22,7 +22,7 @@ public class EmailController {
         this.emailService = emailService;
     }
 
-    @GetMapping("/test-email")
+    @GetMapping("JUST FOR TESTING - delete later")
     public String sendTestEmail(@RequestParam String email) {
 
         AppointmentSlot slot = new AppointmentSlot();
