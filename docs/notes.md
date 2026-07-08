@@ -111,3 +111,5 @@ Advisor behavior:
   1. delete test email controller 
   2. replace Gmail SMTP with SendGrid
   3. Maybe improve data logging?
+  4. NotficationsService.java file code comprehension was not fully completed. might want to complete it for amazon interview?
+  

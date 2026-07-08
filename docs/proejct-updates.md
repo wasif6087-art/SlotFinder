@@ -374,3 +374,76 @@ Completed automatic monitoring system.
 - Improved email formatting
 - Successfully tested end-to-end
 
+---
+Next Session Goals (Target: ~4 hours)
+
+Phase 0 — Finish Today’s Work (≈30–45 min)
+
+1. Set up GitHub Copilot Student
+
+* Apply for GitHub Student Developer Pack
+* Connect GitHub account to VS Code
+* Restore ghost auto-completion
+* Verify inline AI suggestions are working
+
+2. Code Comprehension — NotificationsService.java
+
+* Walk through the entire NotificationsService line by line
+* Understand:
+    * Notification creation flow
+    * Duplicate prevention logic
+    * HashSet-based notification keys
+    * buildNotificationKey()
+    * Why the previous implementation failed
+    * Why the final implementation works
+* Ensure complete understanding before moving on
+
+⸻
+
+Phase 1 — Database Foundation (≈60 min)
+
+3. Configure PostgreSQL + Spring Data JPA
+
+* Add Spring Data JPA dependency
+* Add PostgreSQL driver
+* Configure database connection
+* Verify Spring Boot successfully connects to PostgreSQL
+
+✅ Milestone:
+Database connected to the backend
+
+⸻
+
+Phase 2 — Persist Watch Requests (≈90–120 min)
+
+4. Replace in-memory WatchRequest storage
+
+* Convert WatchRequest into a JPA entity
+* Create WatchRequestRepository
+* Replace the in-memory List with database persistence
+* Update create/view/cancel watch request operations to use the repository
+
+✅ Milestone:
+Watch requests stored in PostgreSQL
+
+⸻
+
+Phase 3 — End-to-End Database Testing (≈45–60 min)
+
+5. Verify persistence through Swagger
+
+* Create a watch request
+* Restart the backend
+* Confirm the watch request still exists
+* Cancel a watch request
+* Verify the active status persists correctly
+* Confirm automatic monitoring continues to work with database-backed watch requests
+
+✅ Milestone:
+Watch requests survive backend 
+
+### Status: COMPLETE
+
+---
+
+
