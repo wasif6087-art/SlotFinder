@@ -38,6 +38,10 @@ public class WatchRequestService {
         return watchRequestRepository.findAll();
     } 
 
+    public List<WatchRequest> getActiveWatchRequests() {
+        return watchRequestRepository.findByActiveTrue();
+    }
+
     public String cancelWatchRequest(Long id) {
         WatchRequest request = watchRequestRepository.findById(id).orElse(null);
 

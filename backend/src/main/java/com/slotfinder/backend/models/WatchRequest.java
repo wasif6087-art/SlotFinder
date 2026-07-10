@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
 public class WatchRequest {
@@ -18,6 +19,7 @@ public class WatchRequest {
     @Id
     @GeneratedValue
     @Column(nullable = false)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
     @Email
@@ -36,9 +38,11 @@ public class WatchRequest {
     private String agentId;
 
     @Column(nullable = false)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private boolean active;
 
     @Column(nullable = false)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private LocalDateTime createdAt;
 
     public Long getId() {

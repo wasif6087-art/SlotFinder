@@ -446,4 +446,106 @@ Watch requests survive backend
 
 ---
 
+Next Session Goals (Target: ~4 hours)
+
+Session Theme:
+Understand the database work from today, clean up the Swagger request body issue, then start persisting Notifications to PostgreSQL.
+
+Phase 1 — Code Comprehension (≈45–60 min)
+
+1. WatchRequestRepository.java
+- Understand why the file is so small
+- Understand `JpaRepository<WatchRequest, Long>`
+- Understand where `save()`, `findAll()`, and `findById()` come from
+- Understand how Spring creates the repository automatically
+
+2. WatchRequestService.java
+- Understand how the service changed from in-memory storage to database-backed storage
+- Walk through:
+  - `createWatchRequest()`
+  - `getAllWatchRequests()`
+  - `cancelWatchRequest()`
+  - `findMatches(Long id)`
+  - `findMatches(WatchRequest request)`
+- Understand why manual `nextId` and `createdAt` were removed
+
+✅ Milestone:
+Understand database-backed WatchRequest flow
+
+
+
+Phase 2 — Quick Swagger Cleanup (≈15–25 min)
+
+Goal:
+Fix or document why Swagger shows database-owned fields in the POST request body.
+
+Tasks:
+- Understand why Swagger shows `id`, `active`, and `createdAt`
+- Decide on quick cleanup approach:
+  - Swagger/OpenAPI annotations, or
+  - leave as known technical debt for future DTO cleanup
+- Make the smallest useful fix or write a clear project note
+
+✅ Milestone:
+No confusion around POST request body
+
+
+
+Phase 3 — Build: Persist Notifications to PostgreSQL (≈90–120 min)
+
+Goal:
+Move Notifications from in-memory storage to database-backed persistence.
+
+Tasks:
+- Convert `Notification` into a JPA entity
+- Add required annotations:
+  - `@Entity`
+  - `@Id`
+  - `@GeneratedValue`
+  - `@Column`
+  - enum/status handling if needed
+- Create `NotificationRepository`
+- Inject `NotificationRepository` into `NotificationsService`
+- Replace in-memory notification storage with repository-backed storage
+- Update `getAllNotifications()` to load from PostgreSQL
+- Keep duplicate prevention working
+
+✅ Milestone:
+Notifications stored in PostgreSQL
+
+
+
+Phase 4 — End-to-End Notification Persistence Testing (≈45–60 min)
+
+Test:
+- Create a watch request
+- Let the scheduler find matching appointments
+- Confirm notifications are created
+- Run `GET /notifications`
+- Restart backend
+- Run `GET /notifications` again
+- Confirm notifications still exist after restart
+- Confirm duplicate notifications are still skipped
+
+✅ Milestone:
+Notifications survive backend restarts
+
+
+Phase 5 — Project Update + Next Roadmap (≈15–20 min)
+
+Document:
+- WatchRequest persistence completed
+- Notification persistence completed
+- Database-backed monitoring status
+- Any known technical debt:
+  - Swagger request DTO cleanup
+  - Gmail SMTP → SendGrid later
+  - Temporary EmailController removal before deployment
+  - Logging/observability later
+
+Next likely milestone:
+Persist AppointmentSlots or add stop-monitoring/unsubscribe link.
+
+✅ Milestone:
+Project state documented clearly
 

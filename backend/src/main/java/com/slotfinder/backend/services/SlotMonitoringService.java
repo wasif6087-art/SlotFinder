@@ -23,7 +23,7 @@ public class SlotMonitoringService {
     }
 
     public void checkAllWatchRequests() throws Exception {
-        List<WatchRequest> watchRequests = watchRequestService.getAllWatchRequests();
+        List<WatchRequest> watchRequests = watchRequestService.getActiveWatchRequests();
 
         for (WatchRequest request : watchRequests) {
             List<AppointmentSlot> matches = watchRequestService.findMatches(request);
