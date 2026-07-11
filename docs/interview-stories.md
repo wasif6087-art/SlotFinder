@@ -398,3 +398,10 @@ A useful engineering principle is to optimize architecture before optimizing inf
 By introducing an abstraction layer first, it becomes much easier to replace external technologies later without affecting the rest of the system.
 
 This allowed me to ship a working MVP quickly while preserving flexibility for future production improvements.
+
+---
+
+“I initially stored notifications and duplicate keys in memory for a fast MVP. That worked during one application session, but restarting the service erased the state and could cause duplicate emails. I migrated Notification to a JPA entity, modeled AppointmentSlot as an embeddable value object, replaced in-memory storage with a Spring Data repository, and moved duplicate detection into PostgreSQL using a derived existsByNotificationKey query. I verified durability by restarting the backend and confirming the duplicate was still detected.”
+
+---
+

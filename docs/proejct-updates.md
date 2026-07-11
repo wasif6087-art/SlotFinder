@@ -549,3 +549,71 @@ Persist AppointmentSlots or add stop-monitoring/unsubscribe link.
 ✅ Milestone:
 Project state documented clearly
 
+---
+
+July 11, 2026
+
+Completed notification persistence by migrating the Notification system from in-memory storage to PostgreSQL.
+
+Completed:
+- Converted `Notification` into a JPA entity.
+- Embedded `AppointmentSlot` using `@Embedded`.
+- Created `NotificationsRepository`.
+- Refactored `NotificationsService` to use the repository instead of in-memory storage.
+- Replaced HashSet-based duplicate persistence with database-backed duplicate detection using `existsByNotificationKey()`.
+- Updated `GET /notifications` to load notifications from PostgreSQL.
+- Built a temporary testing endpoint to create fake notifications without relying on real appointment availability.
+- Successfully verified:
+  - Notifications are persisted in PostgreSQL.
+  - Duplicate notifications are prevented.
+  - Duplicate detection still works after restarting the backend.
+  - Notification persistence survives backend restarts.
+
+Architecture now:
+
+WatchRequest
+↓
+SlotMonitoringService
+↓
+NotificationsService
+↓
+NotificationsRepository
+↓
+PostgreSQL
+
+### Status: COMPLETE
+
+---
+
+Next Session Goals (Target: ~4 hours)
+
+Session Theme:
+Build the user-facing unsubscribe / stop monitoring flow.
+
+Phase 1 — Design the Unsubscribe Flow
+- Decide how users should securely stop monitoring from an email.
+- Design the unsubscribe token/link architecture.
+- Determine how EmailService will identify the correct WatchRequest.
+
+Phase 2 — Backend Implementation
+- Add unsubscribe token support to WatchRequest.
+- Persist the token in PostgreSQL.
+- Create repository/service methods to find a watch request by token.
+- Build an unsubscribe endpoint that deactivates the matching watch request.
+
+Phase 3 — Email Integration
+- Include an unsubscribe link in notification emails.
+- Connect the link to the backend unsubscribe endpoint.
+
+Phase 4 — End-to-End Testing
+- Verify clicking the unsubscribe link deactivates the watch request.
+- Confirm the scheduler no longer processes the watch request.
+- Test invalid and duplicate unsubscribe requests.
+
+✅ Milestone:
+Users can stop monitoring directly from the notification email without using Swagger.
+
+### Status : INCOMPLETE 
+
+
+

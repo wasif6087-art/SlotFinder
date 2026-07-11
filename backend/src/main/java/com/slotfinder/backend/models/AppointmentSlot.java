@@ -1,28 +1,26 @@
 package com.slotfinder.backend.models;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 
+@Embeddable
 public class AppointmentSlot {
 
-    private Long id;
 
     private String advisorName;
 
     private LocalDateTime appointmentDateTime;
 
+    @Enumerated(EnumType.STRING)
     private AppointmentType appointmentType;
 
     private LocalDateTime detectedAt;
 
     private String source;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getAdvisorName() {
         return advisorName;
