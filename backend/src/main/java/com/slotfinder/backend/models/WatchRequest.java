@@ -12,6 +12,8 @@ import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.UUID;
+
 
 @Entity
 public class WatchRequest {
@@ -44,6 +46,11 @@ public class WatchRequest {
     @Column(nullable = false)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private LocalDateTime createdAt;
+
+    @Column(unique = true)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private String unsubscribeToken;
+
 
     public Long getId() {
         return id;
@@ -104,6 +111,15 @@ public class WatchRequest {
     @PrePersist
     public void onCreate() {
         createdAt = LocalDateTime.now();
+        unsubscribeToken = UUID.randomUUID().toString();
+    }
+
+    public String getUnsubscribeToken() {
+        return unsubscribeToken;
+    }
+
+    public void setUnsubscribeToken(String unsubscribeToken) {
+        this.unsubscribeToken = unsubscribeToken;
     }
 
 }

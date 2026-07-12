@@ -35,7 +35,11 @@ public class EmailController {
         slot.setAppointmentDateTime(LocalDateTime.now().plusDays(1));
         slot.setAppointmentType(AppointmentType.PHONE_ZOOM);
 
-        emailService.sendAppointmentNotification(email, slot);
+        emailService.sendAppointmentNotification(
+                email,
+                slot,
+                "test-token"
+        );
 
         return "Test email sent!";
     }
@@ -46,11 +50,14 @@ public class EmailController {
         AppointmentSlot slot = new AppointmentSlot();
         slot.setAdvisorName("Dr. Smith");
         slot.setAppointmentDateTime(LocalDateTime.of(
-            2026, 7, 15, 10, 0)
-        );
+                2026, 7, 15, 10, 0));
         slot.setAppointmentType(AppointmentType.PHONE_ZOOM);
 
-        if (notificationsService.createNotification(email, slot) == null) {
+        if (notificationsService.createNotification(
+                email,
+                slot,
+                "test-token") == null) {
+
             return "Duplicate notification detected.";
         }
 

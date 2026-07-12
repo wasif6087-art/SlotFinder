@@ -6,8 +6,12 @@ import com.slotfinder.backend.models.WatchRequest;
 
 import java.util.List;
 
+import java.util.Optional;
+
 public interface WatchRequestRepository extends JpaRepository<WatchRequest, Long> {
 
     List<WatchRequest> findByActiveTrue();
+
+    Optional<WatchRequest> findByUnsubscribeToken(String unsubscribeToken);
 
 }

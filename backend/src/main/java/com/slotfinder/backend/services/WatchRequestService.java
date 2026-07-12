@@ -42,7 +42,8 @@ public class WatchRequestService {
         return watchRequestRepository.findByActiveTrue();
     }
 
-    public String cancelWatchRequest(Long id) {
+    public String cancelWatchRequest(Long id) //This method is used for Swagger Manual Testing
+     {
         WatchRequest request = watchRequestRepository.findById(id).orElse(null);
 
         if (request ==  null) {
@@ -54,6 +55,33 @@ public class WatchRequestService {
 
         return "Watch request has been cancelled for " + request.getEmail();
     }
+
+    public String cancelWatchRequest(String unsubscribeToken) {
+
+        WatchRequest request = watchRequestRepository
+                .findByUnsubscribeToken(unsubscribeToken)
+                .orElse(null);
+
+        if (request == null) {
+            return "No watch request found";
+        }
+
+        request.setActive(false);
+        watchRequestRepository.save(request);
+
+        return "Watch request has been cancelled for " + request.getEmail();
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     public List<AppointmentSlot> findMatches(Long id) throws Exception {
         WatchRequest request = watchRequestRepository.findById(id).orElse(null);

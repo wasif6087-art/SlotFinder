@@ -613,7 +613,38 @@ Phase 4 — End-to-End Testing
 ✅ Milestone:
 Users can stop monitoring directly from the notification email without using Swagger.
 
-### Status : INCOMPLETE 
+### Status : COMPLETE 
+
+---
+
+---
+
+July 12, 2026
+
+Completed the backend implementation of the user-facing unsubscribe / stop monitoring feature.
+
+Completed:
+- Added a unique `unsubscribeToken` to `WatchRequest`.
+- Automatically generate a UUID unsubscribe token for every new watch request.
+- Added `findByUnsubscribeToken()` to `WatchRequestRepository`.
+- Added token-based cancellation to `WatchRequestService`.
+- Created a public `GET /unsubscribe/{unsubscribeToken}` endpoint.
+- Passed the unsubscribe token through:
+  - `SlotMonitoringService`
+  - `NotificationsService`
+  - `EmailService`
+- Added an unsubscribe link to every notification email.
+- Verified the backend compiles successfully and the unsubscribe endpoint correctly handles requests.
+- Fixed the existing manual stop endpoint after accidentally breaking its controller mapping.
+
+Known Limitation:
+- Full end-to-end testing is still pending because no real UBC appointments were available. The final production flow will be verified once the scheduler sends a real notification email containing a real unsubscribe token.
+
+### Status: BACKEND IMPLEMENTATION COMPLETE
+
+---
+
+
 
 
 

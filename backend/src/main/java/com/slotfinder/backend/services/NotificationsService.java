@@ -27,7 +27,8 @@ public class NotificationsService {
 
     public Notification createNotification(
         String email, 
-        AppointmentSlot appointmentSlot
+        AppointmentSlot appointmentSlot,
+        String unsubscribeToken
     ) {
 
         String notificationKey = buildNotificationKey(email, appointmentSlot);
@@ -42,7 +43,7 @@ public class NotificationsService {
         notification.setSent(false);
         notification.setNotificationKey(notificationKey);
         notificationsRepository.save(notification);
-        emailService.sendAppointmentNotification(email, appointmentSlot);
+        emailService.sendAppointmentNotification(email, appointmentSlot, unsubscribeToken);
         return notification;
 
     }

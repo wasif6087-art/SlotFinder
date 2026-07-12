@@ -26,7 +26,8 @@ public class EmailService {
 
 public void sendAppointmentNotification(
     String email, 
-    AppointmentSlot appointmentSlot
+    AppointmentSlot appointmentSlot,
+    String unsubscribeToken
 ){ 
     SimpleMailMessage message = new SimpleMailMessage();
 
@@ -44,6 +45,9 @@ public void sendAppointmentNotification(
         formattedAppointmentType = "In-person";
     }
 
+   String unsubscribeLink =
+    "http://localhost:8080/unsubscribe/" + unsubscribeToken;
+
     message.setTo(email);
     message.setSubject("Slot Finder: Appointment Available");
     message.setText(
@@ -52,6 +56,8 @@ public void sendAppointmentNotification(
             + "Time: " + formattedDateTime + "\n\n"
             + "Type: " + formattedAppointmentType + "\n\n"
             + "Please book before someone else takes it!\n\n"
+            +"To stop monitoring - click here:\n"
+            + unsubscribeLink + "\n\n"
             + "- SlotFinder"
 
 

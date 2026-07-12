@@ -46,4 +46,13 @@ public class WatchRequestController {
     public String cancelWatchRequest(@PathVariable Long id) {
         return watchRequestService.cancelWatchRequest(id);
     }
+
+    @GetMapping("/unsubscribe/{unsubscribeToken}")
+    public String cancelWatchRequest(
+            @PathVariable String unsubscribeToken
+    ) {
+        return watchRequestService.cancelWatchRequest(unsubscribeToken);
+    }
+
+
 }

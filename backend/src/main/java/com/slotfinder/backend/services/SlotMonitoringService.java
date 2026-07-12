@@ -33,7 +33,8 @@ public class SlotMonitoringService {
                 Notification notification =
                     notificationsService.createNotification(
                             request.getEmail(),
-                            appointmentSlot
+                            appointmentSlot,
+                            request.getUnsubscribeToken()
                 );
 
                 if (notification == null) {
