@@ -645,6 +645,46 @@ Known Limitation:
 ---
 
 
+# August 3, 2026
 
+## Frontend Setup and Initial UI
+
+Completed the initial SlotFinder frontend setup.
+
+### Completed
+
+- Installed Node.js and npm.
+- Created the React frontend using Vite.
+- Started the Vite development server.
+- Verified live updates through `App.jsx`.
+- Learned the basic frontend project structure (`src`, `main.jsx`, and `App.jsx`).
+- Built the first version of the Create Watch Request page with:
+  - SlotFinder heading
+  - Project description
+  - Email input
+  - Appointment Type dropdown
+  - Advisor Preference dropdown
+  - Conditional Advisor dropdown
+  - Start Monitoring button
+- Introduced basic React interactivity using `useState`.
+- Implemented conditional rendering so the Advisor dropdown only appears when **Specific Advisor** is selected.
+
+### Current Status
+
+The frontend foundation and the initial Create Watch Request page are complete.
+
+The form is currently a UI prototype. It is not yet connected to the Spring Boot backend and has not yet been styled with CSS.
+
+### Next Step
+
+Convert the static form into a fully functional frontend by:
+
+- Managing the entire form using React state.
+- Building the form submission flow.
+- Connecting React to the Spring Boot backend.
+- Displaying success and error feedback.
+- Applying basic CSS styling to create a clean MVP interface.
+
+**Status: FRONTEND FOUNDATION COMPLETE**
 
 
