@@ -154,3 +154,69 @@ A user should be able to:
 **Primary Objective:** Complete the first fully functional frontend-to-backend feature for SlotFinder. After tomorrow, users should be able to create watch requests directly from the web interface without using Swagger.
 
 ---
+
+# August 7th Goals
+
+prompt - “Continue SlotFinder. We’re working on Phase 1 of the frontend. The next task is loading advisors from the /advisors endpoint into the React dropdown. Here’s my current App.jsx.”
+
+## 1. Load Advisors from the Backend
+- Fetch the advisor list from `GET /advisors`.
+- Store the returned advisors in React state.
+- Verify the response contains `displayName` and `id`.
+
+**Success Criteria:** React has the real advisor data from the backend.
+
+---
+
+## 2. Populate the Advisor Dropdown
+- Replace the temporary hardcoded advisors.
+- Render the dropdown using the advisors fetched from the backend.
+- Display `displayName` to the user while keeping the corresponding `id`.
+
+**Success Criteria:** The dropdown displays the real advisors from the backend.
+
+---
+
+## 3. Fix Watch Request Data Mapping
+- If **Any Advisor** is selected:
+  - `advisorPreference = ""`
+  - `agentId = ""`
+- If **Specific Advisor** is selected:
+  - `advisorPreference = selectedAdvisor.displayName`
+  - `agentId = selectedAdvisor.id`
+- Verify the request body matches exactly what the backend expects.
+
+**Success Criteria:** Both Any Advisor and Specific Advisor create the correct request body.
+
+---
+
+## 4. Verify End-to-End Submission
+- Submit a watch request using **Any Advisor**.
+- Submit a watch request using **Specific Advisor**.
+- Verify both requests reach the backend correctly.
+- Confirm the watch requests are successfully stored in the database.
+
+**Success Criteria:** The entire frontend → backend → database flow works for both scenarios.
+
+---
+
+## 5. User Feedback
+- Display a success message after a successful submission.
+- Display an error message if the request fails.
+- (Optional) Disable the submit button while the request is being sent.
+
+**Success Criteria:** Users receive clear feedback after submitting a watch request.
+
+---
+
+# End-of-Day Goal
+
+A user should be able to:
+
+- Enter an email.
+- Select an appointment type.
+- Choose **Any Advisor** or **Specific Advisor**.
+- Select a real advisor loaded from the backend.
+- Click **Start Monitoring**.
+- Successfully create a watch request.
+- Receive a success or error message after submission.
