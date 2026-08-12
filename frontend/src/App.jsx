@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState} from 'react'
 import './App.css'
 
 
@@ -9,15 +9,31 @@ function App() {
   const [email, setEmail] = useState('')
   const [appointmentType, setAppointmentType] = useState('PHONE_ZOOM')
   const [advisor, setAdvisor] = useState('')
+  const [advisors, setAdvisors] = useState([])
+
+  useEffect(() => {
+    fetch('http://localhost:8080/advisors')
+      .then(response => response.json())
+      .then(data => setAdvisors(data))
+  }, [])
 
   function handleSubmit(event) {
     event.preventDefault()
+
+    const selectedAdvisor = advisors.find((item) => item.id === advisor)
     const watchRequest = {
       email: email,
       appointmentType: appointmentType,
-      advisorPreference: AdvisorPreference,
-      agentId: advisor
+      advisorPreference: 
+        AdvisorPreference === 'ANY_ADVISOR'
+        ? ''
+        : selectedAdvisor?.displayName,
+      agentId:
+        AdvisorPreference === 'ANY_ADVISOR'
+        ? ''
+        : advisor
     }
+    console.log(watchRequest)
     fetch('http://localhost:8080/watchrequests', {
       method: 'POST',
       headers: {
@@ -81,8 +97,11 @@ function App() {
       onChange={(event) => setAdvisor(event.target.value)}
       >
         <option value="">Select an Advisor</option>
-        <option value="ADVISOR_1">Advisor 1</option>
-        <option value="ADVISOR_2">Advisor 2</option>
+        {advisors.map((advisor) => (
+          <option key={advisor.id} value={advisor.id}>
+            {advisor.displayName}
+          </option>
+        ))}
       </select>
       </>
 

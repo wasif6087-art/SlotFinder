@@ -687,4 +687,92 @@ Convert the static form into a fully functional frontend by:
 
 **Status: FRONTEND FOUNDATION COMPLETE**
 
+---
 
+# August 11, 2026
+
+## Frontend Integration and End-to-End Watch Request Flow
+
+Continued development of the SlotFinder React frontend and moved the Create Watch Request page from a UI prototype into a working frontend-to-backend feature.
+
+### Completed
+
+#### Basic Frontend Layout
+- Added basic CSS styling to the Create Watch Request page.
+- Centered the form and improved spacing and alignment.
+- Styled inputs, dropdowns, and the submit button.
+- Made the page comfortable to use as a functional MVP interface.
+
+#### Controlled Form State
+- Added React state for:
+  - Email
+  - Appointment type
+  - Advisor preference
+  - Selected advisor
+- Converted the form fields into controlled React components.
+- React now always knows the current value of each field.
+- Kept the Advisor dropdown conditional so it only appears when **Specific Advisor** is selected.
+
+#### Form Submission Flow
+- Wrapped the inputs inside a real HTML `<form>`.
+- Added a `handleSubmit()` function.
+- Prevented the default browser page refresh on form submission.
+- Changed the Start Monitoring button to a submit button.
+- Built the watch request object from React state before sending it to the backend.
+
+#### Frontend-to-Backend Connection
+- Connected the React frontend to the Spring Boot backend using `fetch()`.
+- Added a POST request to:
+
+  `POST /watchrequests`
+
+- Converted the watch request JavaScript object into JSON using `JSON.stringify()`.
+- Added the correct `Content-Type: application/json` header.
+
+#### CORS Configuration
+- Encountered and diagnosed a browser CORS error when React attempted to call the Spring Boot backend.
+- Added Spring CORS support using `@CrossOrigin`.
+- Allowed the React development server at:
+
+  `http://localhost:5173`
+
+  to communicate with the backend at:
+
+  `http://localhost:8080`
+
+- Verified frontend requests successfully reach Spring Boot.
+
+#### Real Advisor Integration
+- Connected the frontend to the existing backend advisor endpoint:
+
+  `GET /advisors`
+
+- Added `useEffect()` to automatically fetch advisor data when the React application loads.
+- Added React state to store the returned advisor list.
+- Verified the backend returns real advisor information including:
+  - `displayName`
+  - `id`
+  - avatar metadata
+
+#### Dynamic Advisor Dropdown
+- Removed the temporary hardcoded Advisor 1 / Advisor 2 dropdown values.
+- Used `.map()` to dynamically render the real advisor list returned from the backend.
+- Displayed each advisor's `displayName` to the user.
+- Stored the corresponding backend advisor `id` as the dropdown value.
+
+The Specific Advisor dropdown now shows real UBC advisor names instead of placeholder values.
+
+#### Watch Request Data Mapping
+Fixed the frontend request body so it matches exactly what the backend expects.
+
+For **Any Advisor**:
+
+json
+{
+  "advisorPreference": "",
+  "agentId": ""
+}
+
+Current Status: end-to-end frontend/backend watch-request flow is working, including real advisors and correct mapping.
+    
+Next Step: form validation + user feedback/loading state.

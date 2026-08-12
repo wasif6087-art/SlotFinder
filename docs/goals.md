@@ -220,3 +220,101 @@ A user should be able to:
 - Click **Start Monitoring**.
 - Successfully create a watch request.
 - Receive a success or error message after submission.
+
+---
+
+# August 12th — Form Validation & User Feedback
+
+## Current Starting Point
+
+The core Create Watch Request form now works end-to-end.
+
+Completed:
+- React fetches the real advisor list from `GET /advisors`.
+- Advisors are stored in React state.
+- The Specific Advisor dropdown is populated dynamically using `displayName`.
+- The selected advisor's real `id` is stored in React state.
+- Any Advisor correctly submits:
+  - `advisorPreference: ""`
+  - `agentId: ""`
+- Specific Advisor correctly submits:
+  - `advisorPreference: selectedAdvisor.displayName`
+  - `agentId: selectedAdvisor.id`
+- Both scenarios successfully reach the backend through `POST /watchrequests`.
+
+## Goal: Form Validation & User Feedback
+
+### 1. Email Validation
+- Prevent submission if the email field is empty.
+- Prevent submission if the email address has an invalid format.
+- Start with native HTML validation (`required` + `type="email"`).
+
+Success Criteria:
+The form cannot be submitted with an empty or invalid email address.
+
+### 2. Specific Advisor Validation
+- If `ANY_ADVISOR` is selected, no advisor needs to be chosen.
+- If `SPECIFIC_ADVISOR` is selected, require the user to select an advisor.
+- Prevent an invalid request from being submitted.
+
+Success Criteria:
+A Specific Advisor request cannot be submitted without an actual advisor selected.
+
+### 3. Detect POST Success / Failure
+- Inspect the response returned by `POST /watchrequests`.
+- Determine whether the backend accepted or rejected the request.
+- Do not treat every fetch as automatically successful.
+
+Success Criteria:
+React knows whether creation of the watch request succeeded or failed.
+
+### 4. Success Feedback
+- Show the user a confirmation after successful submission.
+- Example:
+  "Monitoring started. We'll email you when a matching appointment becomes available."
+
+Success Criteria:
+The user no longer needs DevTools to know their watch request was created.
+
+### 5. Error Feedback
+- Show the user an understandable message if the request fails.
+- Do not silently fail.
+
+Success Criteria:
+The user knows when their watch request was not created.
+
+### 6. Submission / Loading State
+- Track when the request is being submitted.
+- Disable the Start Monitoring button while the request is in progress.
+- Give the user clear feedback that something is happening.
+
+Success Criteria:
+The user cannot accidentally submit the same form repeatedly while waiting for the backend.
+
+## End Goal
+
+The Create Watch Request form should behave like a real user-facing form:
+
+Fill form
+→ Validate input
+→ Submit request
+→ Wait for backend
+→ Show success or failure feedback
+
+## Prompt to start
+
+"Continue SlotFinder. We're working on the React frontend Create Watch Request form.
+
+Last session we completed the real advisor integration and verified the full frontend → backend flow for both Any Advisor and Specific Advisor.
+
+Today we're working on form validation and user feedback. The six tasks are:
+1. Email validation
+2. Specific Advisor validation
+3. Detect POST success/failure
+4. Success feedback
+5. Error feedback
+6. Submission/loading state
+
+Start with #1 only.
+
+Keep using our teaching approach: explain WHY before WHAT, make one small change at a time, explain the syntax I write, and don't jump ahead or dump a bunch of code on me."
