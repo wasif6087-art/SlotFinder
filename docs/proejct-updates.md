@@ -776,3 +776,36 @@ json
 Current Status: end-to-end frontend/backend watch-request flow is working, including real advisors and correct mapping.
     
 Next Step: form validation + user feedback/loading state.
+
+---
+---
+
+# August 12, 2026
+
+## Frontend Validation, Feedback, and Submission State
+
+Completed the next major frontend milestone for the Create Watch Request flow.
+
+### Completed
+
+- Added native email validation using `type="email"` and `required`.
+- Added validation so a user cannot choose **Specific Advisor** without selecting an actual advisor.
+- Updated the POST flow to inspect the backend response instead of treating every `fetch()` as successful.
+- Added visible success and error feedback for watch request submissions.
+- Added network error handling with `.catch()` so the UI can report when the backend is unavailable.
+- Added submission/loading state with `isSubmitting`.
+- Disabled the Start Monitoring button while a request is in progress to prevent duplicate submissions.
+- Added temporary button feedback during submission.
+- Verified the full frontend flow still works for both **Any Advisor** and **Specific Advisor** requests.
+
+### Current Status
+
+The Create Watch Request form is now functionally complete as a real user-facing frontend flow: it validates input, handles success/failure, prevents duplicate submissions, and communicates correctly with the Spring Boot backend.
+
+### Next Step
+
+Finish the Create Watch Request frontend MVP by adding a proper post-submission success state, a **Create Another Watch Request** flow, advisor loading/error states, small UX cleanup, responsive checks, and a final end-to-end frontend verification.
+
+**Status: FORM VALIDATION & USER FEEDBACK COMPLETE**
+
+Going Forward : Frontend MVP complete → unsubscribe frontend → deployment → reliability/testing → README/resume polish.

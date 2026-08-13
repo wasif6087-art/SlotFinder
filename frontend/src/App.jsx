@@ -10,6 +10,9 @@ function App() {
   const [appointmentType, setAppointmentType] = useState('PHONE_ZOOM')
   const [advisor, setAdvisor] = useState('')
   const [advisors, setAdvisors] = useState([])
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     fetch('http://localhost:8080/advisors')
@@ -19,6 +22,7 @@ function App() {
 
   function handleSubmit(event) {
     event.preventDefault()
+    setIsSubmitting(true)
 
     const selectedAdvisor = advisors.find((item) => item.id === advisor)
     const watchRequest = {
@@ -41,7 +45,27 @@ function App() {
       },
       body: JSON.stringify(watchRequest)
     })
+    .then((response) => {
+      console.log(response)
+      if (response.ok) {
+        setSuccessMessage('Watch request submitted successfully!')
+        setErrorMessage('')
+      } else {
+        setErrorMessage('Something went wrong. Please try again.')
+        setSuccessMessage('')
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+      setErrorMessage('Could not connect to the server.')
+      setSuccessMessage('')
+    })
+    .finally(() => {
+      setIsSubmitting(false)
+    })
+
   }
+  
 
   return (
     <main className="app">
@@ -62,6 +86,7 @@ function App() {
         placeholder="you@example.com"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
+        required
       />
 
       <label htmlFor="appointmentType">Appointment Type</label>
@@ -95,6 +120,7 @@ function App() {
       id="advisor"
       value={advisor}
       onChange={(event) => setAdvisor(event.target.value)}
+      required
       >
         <option value="">Select an Advisor</option>
         {advisors.map((advisor) => (
@@ -107,9 +133,12 @@ function App() {
 
       )}
 
-      <button type="submit">
-        Start Monitoring
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Submitting...' : 'Start Monitoring'}
       </button>
+
+      {successMessage && <p>{successMessage}</p>}
+      {errorMessage && <p>{errorMessage}</p>}
 
     </form>
     </main>
