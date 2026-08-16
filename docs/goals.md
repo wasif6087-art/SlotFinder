@@ -367,6 +367,7 @@ Tomorrow’s goal is:
 - Show useful feedback while advisors are loading.
 - Show an understandable error if GET /advisors fails.
 
+# August 14th: just start from task 4. No need to re-promt or restart, just jump in
 4. UX Cleanup
 - Improve success/error presentation.
 - Review submission/loading behavior.
@@ -397,3 +398,9 @@ Important teaching instructions:
 - Explain every new syntax I write.
 - Wait for me to confirm before moving to the next step.
 - Keep the implementation simple and MVP-focused; do not overengineer.
+
+---
+
+# August 16th
+
+1. Figure out unsubcribe frontend + how to link to backend (we do currently have an unsubscribe endpoint)

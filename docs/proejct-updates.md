@@ -809,3 +809,126 @@ Finish the Create Watch Request frontend MVP by adding a proper post-submission 
 **Status: FORM VALIDATION & USER FEEDBACK COMPLETE**
 
 Going Forward : Frontend MVP complete → unsubscribe frontend → deployment → reliability/testing → README/resume polish.
+
+---
+
+# August 15, 2026
+
+## Create Watch Request Frontend MVP Complete
+
+Completed the final Create Watch Request frontend milestone for SlotFinder.
+
+### Completed
+
+#### Proper Success State
+- Replaced the old inline success message with a dedicated post-submission success view.
+- Added a clear success confirmation:
+  - **“You’re all set!”**
+  - **“We’ll email you as soon as appointments open up.”**
+- Display the email address that will receive notifications.
+- Added a green success checkmark and polished success-state layout.
+
+#### Submit Another Request Flow
+- Added a **Submit Another Request** button.
+- Built `handleCreateAnother()` to reset the frontend form state.
+- Reset:
+  - email
+  - appointment type
+  - advisor preference
+  - selected advisor
+  - success/error state
+- Verified the user returns to a clean default form after a successful request.
+
+#### Advisor Loading and Error State
+- Added loading state for `GET /advisors`.
+- Added advisor-fetch error handling.
+- Display useful feedback when advisors cannot be loaded.
+- Verified the frontend behaves correctly when the backend is unavailable.
+
+#### UX and Visual Redesign
+Expanded the original UX cleanup task into a full frontend design pass.
+
+Updated the product to a cleaner modern startup-style interface with:
+
+- User-facing name changed to **UBC SlotFinder**
+- Indigo primary brand accent
+- Light/off-white background
+- Improved typography and text contrast
+- Cleaner spacing and layout
+- Redesigned form controls and buttons
+- Improved success and error presentation
+- More readable labels and supporting text
+- Polished custom dropdown behavior
+- Improved visual hierarchy across the form and success state
+
+Created and documented a dedicated `Design Spec.md` covering:
+
+- Product voice
+- Layout and spacing
+- Typography
+- Visual identity
+- Success and error states
+- Responsive behavior
+
+#### Responsive UI
+Tested the frontend at desktop and mobile widths.
+
+Verified on an iPhone-sized viewport:
+
+- No horizontal overflow
+- Form controls fit correctly
+- Comfortable mobile padding
+- Heading and tagline remain readable
+- Success state fits cleanly
+- Email display and buttons remain responsive
+- Single-column layout works correctly
+
+### Final End-to-End Verification
+
+Completed the full frontend verification checklist.
+
+Successfully tested:
+
+1. Valid **Any Advisor** request
+2. Valid **Specific Advisor** request
+3. Invalid email
+4. Missing specific advisor
+5. Backend unavailable
+6. Successful retry after backend recovery
+7. **Submit Another Request** reset flow
+
+All test cases passed.
+
+### Current Status
+
+The Create Watch Request frontend is now complete as a polished MVP feature.
+
+The full flow now supports:
+
+User enters request  
+↓  
+Frontend validates input  
+↓  
+Real advisors loaded from backend  
+↓  
+Watch request submitted to Spring Boot  
+↓  
+Errors handled gracefully  
+↓  
+Successful request shows confirmation state  
+↓  
+User can submit another request  
+↓  
+Layout works on desktop and mobile
+
+✅ **Milestone: CREATE WATCH REQUEST FRONTEND COMPLETE**
+
+### Next Step
+
+Begin the next major frontend milestone:
+
+**Unsubscribe Frontend**
+
+After that, the planned roadmap is:
+
+Frontend MVP complete → unsubscribe frontend → deployment → reliability/testing → README/resume polish.

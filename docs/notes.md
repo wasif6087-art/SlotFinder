@@ -113,3 +113,7 @@ Advisor behavior:
   3. Maybe improve data logging?
   4. NotficationsService.java file code comprehension was not fully completed. might want to complete it for amazon interview?
   
+  ---
+
+  Question: What if someone forgets to unsubscribe (they dont use that email anymore etc). Do we just keep monitoring for them forever?
+  

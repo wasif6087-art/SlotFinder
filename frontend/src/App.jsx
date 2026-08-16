@@ -1,8 +1,65 @@
-import { useEffect, useState} from 'react'
+import { useEffect, useState, useRef } from 'react'
 import './App.css'
 
+// Custom Dropdown Component
+function Dropdown({ id, value, onChange, options, placeholder, disabled, className }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef(null)
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
 
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen])
+
+  const selectedOption = options.find(opt => opt.value === value)
+  const displayText = selectedOption?.label || placeholder
+
+  return (
+    <div className={`dropdown ${className || ''}`} ref={dropdownRef}>
+      <button
+        type="button"
+        className="dropdown-trigger"
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+        disabled={disabled}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+      >
+        <span className="dropdown-text">{displayText}</span>
+        <svg className={`dropdown-arrow ${isOpen ? 'open' : ''}`} width="12" height="8" viewBox="0 0 12 8" fill="none">
+          <path d="M1 1L6 6L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      </button>
+      
+      {isOpen && (
+        <div className="dropdown-menu">
+          {options.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              className={`dropdown-option ${value === option.value ? 'selected' : ''}`}
+              onClick={() => {
+                onChange(option.value)
+                setIsOpen(false)
+              }}
+              role="option"
+              aria-selected={value === option.value}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 function App() {
   const [AdvisorPreference, setAdvisorPreference] = useState('ANY_ADVISOR')
@@ -10,18 +67,50 @@ function App() {
   const [appointmentType, setAppointmentType] = useState('PHONE_ZOOM')
   const [advisor, setAdvisor] = useState('')
   const [advisors, setAdvisors] = useState([])
-  const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [advisorsLoading, setAdvisorsLoading] = useState(true)
+  const [advisorsError, setAdvisorsError] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [advisorError, setAdvisorError] = useState('')
+  
 
   useEffect(() => {
     fetch('http://localhost:8080/advisors')
       .then(response => response.json())
-      .then(data => setAdvisors(data))
+      .then(data => {
+        setAdvisors(data)
+      })
+      .catch(error => {
+        setAdvisorsError('Failed to fetch advisors.')
+      })
+      .finally(() => {
+        setAdvisorsLoading(false)
+      })
   }, [])
 
   function handleSubmit(event) {
     event.preventDefault()
+    
+    // Reset errors
+    setEmailError('')
+    setAdvisorError('')
+    setErrorMessage('')
+    
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setEmailError('Enter a valid email address.')
+      return
+    }
+    
+    // Validate advisor selection if specific advisor is chosen
+    if (AdvisorPreference === 'SPECIFIC_ADVISOR' && !advisor) {
+      setAdvisorError('Choose an advisor to continue.')
+      return
+    }
+    
     setIsSubmitting(true)
 
     const selectedAdvisor = advisors.find((item) => item.id === advisor)
@@ -48,99 +137,140 @@ function App() {
     .then((response) => {
       console.log(response)
       if (response.ok) {
-        setSuccessMessage('Watch request submitted successfully!')
         setErrorMessage('')
+        setSubmitted(true)
       } else {
         setErrorMessage('Something went wrong. Please try again.')
-        setSuccessMessage('')
       }
     })
     .catch((error) => {
       console.log(error)
-      setErrorMessage('Could not connect to the server.')
-      setSuccessMessage('')
+      setErrorMessage('Something went wrong. Please try again.')
     })
     .finally(() => {
       setIsSubmitting(false)
     })
 
   }
-  
+
+  function handleCreateAnother() {
+    setSubmitted(false)
+    setErrorMessage('')
+    setEmail('')
+    setAppointmentType('PHONE_ZOOM')
+    setAdvisorPreference('ANY_ADVISOR')
+    setAdvisor('')
+    setEmailError('')
+    setAdvisorError('')
+  }
 
   return (
     <main className="app">
-      <h1>SlotFinder</h1>
+      <div className="container">
+        <h1 className="brand-heading">UBC SlotFinder</h1>
+        <p className="tagline">Advising appointments without refreshing all day.</p>
 
-      <p>
-        Advising appointments without refreshing all day.
-      </p>
+        {!submitted && (
+          <form className="form-container" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value)
+                  if (emailError) setEmailError('')
+                }}
+                className={emailError ? 'error' : ''}
+              />
+              {emailError && <span className="error-message">{emailError}</span>}
+            </div>
 
-      <form className="form-container" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="appointmentType">Appointment Type</label>
+              <Dropdown
+                id="appointmentType"
+                value={appointmentType}
+                onChange={setAppointmentType}
+                options={[
+                  { value: 'PHONE_ZOOM', label: 'Phone / Zoom' },
+                  { value: 'IN_PERSON', label: 'In Person' }
+                ]}
+                placeholder="Select appointment type"
+              />
+            </div>
 
+            <div className="form-group">
+              <label htmlFor="advisorPreference">Advisor Preference</label>
+              <Dropdown
+                id="advisorPreference"
+                value={AdvisorPreference}
+                onChange={setAdvisorPreference}
+                options={[
+                  { value: 'ANY_ADVISOR', label: 'Any Advisor' },
+                  { value: 'SPECIFIC_ADVISOR', label: 'Specific Advisor' }
+                ]}
+                placeholder="Select preference"
+              />
+            </div>
 
-      <label htmlFor="email">Email</label>
-      
-      <input
-        id="email"
-        type="email"
-        placeholder="you@example.com"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-        required
-      />
+            {AdvisorPreference === 'SPECIFIC_ADVISOR' && (
+              <div className="form-group">
+                <label htmlFor="advisor">Advisor</label>
+                {advisorsLoading && <p className="loading-text">Loading advisors...</p>}
+                {advisorsError && <p className="error-message">{advisorsError}</p>}
+                {!advisorsLoading && !advisorsError && (
+                  <>
+                    <Dropdown
+                      id="advisor"
+                      value={advisor}
+                      onChange={(value) => {
+                        setAdvisor(value)
+                        if (advisorError) setAdvisorError('')
+                      }}
+                      options={[
+                        { value: '', label: 'Select an Advisor' },
+                        ...advisors.map((adv) => ({
+                          value: adv.id,
+                          label: adv.displayName
+                        }))
+                      ]}
+                      placeholder="Select an advisor"
+                      className={advisorError ? 'error' : ''}
+                    />
+                    {advisorError && <span className="error-message">{advisorError}</span>}
+                  </>
+                )}
+              </div>
+            )}
 
-      <label htmlFor="appointmentType">Appointment Type</label>
-      
-      <select 
-      id="appointmentType" 
-      value={appointmentType} 
-      onChange={(event) => setAppointmentType(event.target.value)}
-      >
-        <option value="PHONE_ZOOM">Phone / Zoom</option>
-        <option value="IN_PERSON">In Person</option>
-      </select>
+            <button type="submit" disabled={isSubmitting} className="primary-button">
+              Find Appointments
+            </button>
 
-      <label htmlFor="advisorPreference">Advisor Preference</label>
+            {isSubmitting && <div className="spinner"></div>}
 
-      <select
-        id="advisorPreference"
-        value={AdvisorPreference}
-        onChange={(event) => setAdvisorPreference(event.target.value)}
-      >
-        <option value="ANY_ADVISOR">Any Advisor</option>
-        <option value="SPECIFIC_ADVISOR">Specific Advisor</option>
-      </select>
+            {errorMessage && <p className="error-message error-server">{errorMessage}</p>}
+          </form>
+        )}
 
-      {AdvisorPreference === 'SPECIFIC_ADVISOR' && (
-        <>
-
-      <label htmlFor="advisor">Advisor</label>
-
-      <select 
-      id="advisor"
-      value={advisor}
-      onChange={(event) => setAdvisor(event.target.value)}
-      required
-      >
-        <option value="">Select an Advisor</option>
-        {advisors.map((advisor) => (
-          <option key={advisor.id} value={advisor.id}>
-            {advisor.displayName}
-          </option>
-        ))}
-      </select>
-      </>
-
-      )}
-
-      <button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Submitting...' : 'Start Monitoring'}
-      </button>
-
-      {successMessage && <p>{successMessage}</p>}
-      {errorMessage && <p>{errorMessage}</p>}
-
-    </form>
+        {submitted && (
+          <div className="success-state">
+            <div className="success-checkmark">✓</div>
+            <h2 className="success-heading">You're all set!</h2>
+            <p className="success-message">We'll email you as soon as appointments open up.</p>
+            <div className="success-email-section">
+              <p className="success-email-label">We'll notify you at</p>
+              <p className="success-email">{email}</p>
+            </div>
+            <button onClick={handleCreateAnother} className="secondary-button">
+              Submit Another Request
+            </button>
+          </div>
+        )}
+      </div>
     </main>
   )
 }
