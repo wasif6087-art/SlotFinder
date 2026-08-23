@@ -404,3 +404,68 @@ Important teaching instructions:
 # August 16th
 
 1. Figure out unsubcribe frontend + how to link to backend (we do currently have an unsubscribe endpoint)
+
+# August 17th — Unsubscribe Frontend
+
+## Goal
+Build the frontend unsubscribe flow and connect it to the existing backend unsubscribe system.
+
+## BEGIN HERE : Start the backend. Start the frontend. Play with the app. Read the last prompt and response on 'SlotFinder Backend' chat. Then just jump into the work from there.
+
+## Stage 1 — Verify Existing Backend Unsubscribe
+- Inspect the existing unsubscribe endpoint in Swagger.
+- Determine what token/parameter it expects.
+- Test the endpoint manually.
+- Confirm the correct WatchRequest becomes inactive.
+
+**Success Criteria:** Backend unsubscribe flow is understood and verified.
+
+## Stage 2 — Understand the Email Unsubscribe Link
+- Inspect how the unsubscribe token is generated and stored.
+- Inspect how the unsubscribe URL is added to notification emails.
+- Determine how the email link should route users to the React frontend instead of directly to the backend.
+
+**Success Criteria:** Complete email → frontend → backend flow is planned.
+
+## Stage 3 — Design Unsubscribe UX
+- Design the Stop Monitoring confirmation state.
+- Design the Monitoring Stopped success state.
+- Decide button actions and user-facing text.
+- Keep the design consistent with the existing SlotFinder frontend.
+
+**Success Criteria:** Unsubscribe frontend behavior and UI are finalized before implementation.
+
+## End Goal
+
+Email notification  
+→ Click unsubscribe link  
+→ Open SlotFinder unsubscribe page  
+→ Confirm stop monitoring  
+→ Backend deactivates WatchRequest  
+→ Show confirmation to user
+
+---
+
+# August 21st 
+
+Handle these two issues - 
+
+  1) What if someone forgets to unsubscribe (they dont use that email anymore etc). Do we just keep monitoring for them forever?
+
+  2) Unsubscribe link is sort of hidden in Gmail issue (hidden after 3 dots)
+
+  3) Start/Look into Deployment
+
+  ---
+
+# August 22nd
+
+1) Scope deployment - what is it? how to do irt? what software to use? costs and benefits?
+(just get a general idea of the whole deployment thing cuz you've never done it before)
+
+2) what changes do i need to make to my whole project (a lot of it is configured to only run on my device)
+
+3) do i use AWS or not? what do student usually use to deploy projects like this? 
+
+
+  

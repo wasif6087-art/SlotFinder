@@ -932,3 +932,39 @@ Begin the next major frontend milestone:
 After that, the planned roadmap is:
 
 Frontend MVP complete → unsubscribe frontend → deployment → reliability/testing → README/resume polish.
+
+---
+
+# August 20, 2026 — Project Update
+
+## Unsubscribe Flow Completed
+
+- Finished the frontend unsubscribe flow.
+- Added `/unsubscribe/{token}` handling to the React frontend.
+- Added confirmation screen with **Stop Monitoring** and **Keep Monitoring** options.
+- Added polished result states:
+  - **Monitoring Cancelled** — confirms notifications have been stopped.
+  - **We'll Keep Monitoring** — confirms SlotFinder will continue watching for appointments.
+- Polished unsubscribe UI to match the existing SlotFinder home/success page design.
+- Updated email unsubscribe links to point to the frontend (`localhost:5173`) instead of directly hitting the backend endpoint.
+
+## Pre-Deployment Decisions
+
+Identified two remaining unsubscribe/lifecycle concerns to address before deployment:
+
+1. Add a strategy for expiring abandoned watch requests so they aren't monitored forever.
+2. Improve unsubscribe-link visibility in notification emails, since Gmail may collapse the current link behind `...`.
+
+Also reviewed other pre-deployment concerns:
+- **SendGrid:** not required for initial deployment; Gmail SMTP is sufficient for the MVP.
+- **Logging:** current logging is sufficient to proceed. Do a small cleanup/improvement during reliability testing rather than blocking deployment.
+
+## Road Ahead
+
+1. Unsubscribe/lifecycle hardening
+2. Deploy SlotFinder
+3. Reliability + end-to-end testing
+4. Logging cleanup if needed
+5. README / portfolio polish
+
+unsubscribe frontend → deployment → reliability/testing → README/resume polish.

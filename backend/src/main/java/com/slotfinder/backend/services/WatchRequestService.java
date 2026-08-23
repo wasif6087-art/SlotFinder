@@ -9,6 +9,8 @@ import com.slotfinder.backend.models.WatchRequest;
 
 import com.slotfinder.backend.repositories.WatchRequestRepository;
 
+import java.time.LocalDateTime;
+
 @Service
 public class WatchRequestService {
 
@@ -39,7 +41,21 @@ public class WatchRequestService {
     } 
 
     public List<WatchRequest> getActiveWatchRequests() {
-        return watchRequestRepository.findByActiveTrue();
+        List <WatchRequest> activeRequests = watchRequestRepository.findByActiveTrue();
+        LocalDateTime expirationCutoff = LocalDateTime.now().minusDays(14);
+
+        for (WatchRequest request : activeRequests) {
+            if (request.getCreatedAt().isBefore(expirationCutoff)) {
+                request.setActive(false);
+                watchRequestRepository.save(request);
+                System.out.println("Expired watch request for " + request.getEmail());
+            }
+        }
+
+        activeRequests.removeIf(request -> !request.getActive());
+
+
+        return activeRequests;
     }
 
     public String cancelWatchRequest(Long id) //This method is used for Swagger Manual Testing

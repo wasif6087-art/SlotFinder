@@ -74,6 +74,13 @@ function App() {
   const [advisorsError, setAdvisorsError] = useState('')
   const [emailError, setEmailError] = useState('')
   const [advisorError, setAdvisorError] = useState('')
+
+  const pathParts = window.location.pathname.split('/')
+  const unsubscribeToken = pathParts[1] === 'unsubscribe' ? pathParts[2] : null
+  const [unsubscribed, setUnsubscribed] = useState(false)
+  const [keepMonitoring, setKeepMonitoring] = useState(false)
+
+  
   
 
   useEffect(() => {
@@ -163,6 +170,85 @@ function App() {
     setEmailError('')
     setAdvisorError('')
   }
+
+  function handleUnsubscribe() {
+    fetch(`http://localhost:8080/unsubscribe/${unsubscribeToken}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to unsubscribe.')
+        }
+        return response.text()
+      })
+      .then((data) => {
+        console.log(data)
+        setUnsubscribed(true)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
+  if (unsubscribeToken) {
+
+    if (unsubscribed) {
+      return (
+        <main className="app">
+          <div className="container">
+            <h1 className="brand-heading">UBC SlotFinder</h1>
+            <p className="tagline">Advising appointments without refreshing all day.</p>
+
+            <div className="success-state">
+              <div className="success-checkmark">✓</div>
+              <h2 className="success-heading">Monitoring Cancelled</h2>
+              <p className="success-message">You will no longer receive notifications for this request.</p>
+            </div>
+          </div>
+        </main>
+      )
+    }
+
+    if (keepMonitoring) {
+      return (
+        <main className="app">
+          <div className="container">
+            <h1 className="brand-heading">UBC SlotFinder</h1>
+            <p className="tagline">Advising appointments without refreshing all day.</p>
+
+            <div className="success-state">
+              <div className="success-checkmark">✓</div>
+              <h2 className="success-heading">We'll Keep Looking</h2>
+              <p className="success-message">We'll email you when appointment slots are available.</p>
+            </div>
+          </div>
+        </main>
+      )
+    }
+
+    return (
+      <main className="app">
+        <div className="container">
+          <h1 className="brand-heading">UBC SlotFinder</h1>
+          <p className="tagline">Advising appointments without refreshing all day.</p>
+
+          <div className="unsubscribe-confirmation">
+            <h2 className="success-heading">Stop appointment alerts?</h2>
+            <p className="success-message">You will no longer receive appointment notifications.</p>
+
+            <div className="unsubscribe-actions">
+              <button className="primary-button" onClick={handleUnsubscribe}>
+                Stop Monitoring
+              </button>
+
+              <button className="secondary-button" onClick={() => setKeepMonitoring(true)}>
+                Keep Monitoring
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    )
+  }  
+
 
   return (
     <main className="app">

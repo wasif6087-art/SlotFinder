@@ -46,18 +46,18 @@ public void sendAppointmentNotification(
     }
 
    String unsubscribeLink =
-    "http://localhost:8080/unsubscribe/" + unsubscribeToken;
+    "http://localhost:5173/unsubscribe/" + unsubscribeToken;
 
     message.setTo(email);
     message.setSubject("Slot Finder: Appointment Available");
     message.setText(
         "🎓 SlotFinder Appointment Found!\n\n"
-            + "Advsior: " + appointmentSlot.getAdvisorName() + "\n\n"
+            + "To stop monitoring - click here:\n"
+            + unsubscribeLink + "\n\n"
+            + "Advisor: " + appointmentSlot.getAdvisorName() + "\n\n"
             + "Time: " + formattedDateTime + "\n\n"
             + "Type: " + formattedAppointmentType + "\n\n"
             + "Please book before someone else takes it!\n\n"
-            +"To stop monitoring - click here:\n"
-            + unsubscribeLink + "\n\n"
             + "- SlotFinder"
 
 

@@ -405,3 +405,100 @@ This allowed me to ship a working MVP quickly while preserving flexibility for f
 
 ---
 
+## Interview Story — Automatic Watch Request Expiration
+
+### Problem
+While preparing SlotFinder for deployment, I realized there was a lifecycle problem with watch requests.
+
+Users could create a watch request and manually unsubscribe, but if someone forgot to unsubscribe or abandoned the email account, their request would remain `active = true` indefinitely. Since the scheduler checks active requests every minute, the application could waste resources monitoring abandoned requests forever.
+
+### Solution
+I introduced a **14-day automatic expiration policy** for watch requests.
+
+When `getActiveWatchRequests()` runs:
+
+1. Retrieve all requests currently marked `active = true`.
+2. Calculate an expiration cutoff using `LocalDateTime.now().minusDays(14)`.
+3. Compare each request's existing `createdAt` timestamp against the cutoff.
+4. If a request is older than 14 days:
+   - Set `active = false`.
+   - Persist the change to PostgreSQL.
+   - Log that the request expired.
+5. Remove newly expired requests from the list before returning it to the monitoring pipeline.
+
+This reused the existing `createdAt` and `active` fields, so no new database columns or classes were necessary.
+
+### Testing
+Instead of waiting 14 days, I temporarily changed the expiration period to **1 minute**.
+
+I created a new watch request, confirmed it started as `active = true`, waited for it to expire and for the scheduler to run, then verified through the API that PostgreSQL now stored it as `active = false`.
+
+After confirming the complete flow worked, I restored the production rule to 14 days.
+
+### Key Engineering Decisions
+- **Persist expiration rather than only filtering old requests:** the database accurately reflects that the request is no longer active.
+- **Reuse existing lifecycle data:** `createdAt` already provided everything needed to determine expiration.
+- **Keep manual unsubscribe unchanged:** automatic expiration complements the existing unsubscribe flow rather than replacing it.
+- **Avoid overengineering:** no separate expiration service, database migration, or cleanup system was necessary for the project's scope.
+
+### Interview Takeaway
+This is a good example of thinking beyond the happy path. The core feature already worked, but I identified a resource/lifecycle issue that would appear in a long-running system, implemented a small solution using the existing architecture, and tested time-dependent behavior without actually waiting for the real expiration period.
+
+**Concepts demonstrated:** lifecycle management, scheduled/background processing, persistence, Spring Data JPA, PostgreSQL, time-based business logic, resource efficiency, edge-case thinking, and pragmatic system design.
+
+---
+
+## Interview Story — Gmail Collapsing the Unsubscribe Link
+
+### Problem
+While testing SlotFinder's real email notifications, I discovered a UX issue I hadn't anticipated.
+
+When SlotFinder found multiple appointment slots at once, it sent several notification emails to the user. Gmail grouped these messages into a conversation and sometimes collapsed repeated portions of the email behind the `...` button.
+
+Unfortunately, the **unsubscribe / stop-monitoring link was near the bottom of the email**, so Gmail could hide it. A normal user might therefore think there was no way to stop the notifications.
+
+### Initial Solution Idea
+My first instinct was to redesign the notification system so that multiple available appointments would be combined into a single digest email instead of sending one email per slot.
+
+That would improve the overall notification experience, but I realized it would require changing more than formatting:
+- grouping matched appointment slots
+- changing the email service API
+- modifying the monitoring/notification flow
+- testing new behavior and edge cases
+
+Since I was approaching deployment, this created a **scope-creep decision**: should I redesign the notification architecture now or solve the immediate UX problem and deploy?
+
+### Decision
+I decided not to let a larger architectural improvement block deployment.
+
+Instead, I made the smallest useful change: **move the unsubscribe link near the top of every notification email**, before the appointment details.
+
+The email structure became roughly:
+
+- SlotFinder Appointment Found
+- **Stop monitoring → unsubscribe link**
+- Advisor
+- Time
+- Appointment type
+- Booking reminder
+
+### Testing / Discovery
+I tested the change by sending multiple real emails through Gmail.
+
+The unsubscribe link became immediately visible, but Gmail's collapsing behavior was still inconsistent because Gmail decides which repeated portions of threaded messages to hide. This helped me realize that trying to perfectly control Gmail's collapsing algorithm from the application would be brittle.
+
+### Result
+The critical user action — stopping notifications — became much easier to discover without requiring a larger redesign of the notification system.
+
+I intentionally deferred the **digest-email architecture** as a future improvement rather than allowing it to delay deployment.
+
+### What I Learned
+This was less about writing difficult code and more about **product and engineering judgment**.
+
+I learned to distinguish between:
+
+- a real user problem that should be fixed before deployment,
+- the smallest change that adequately solves that problem,
+- and a larger architectural improvement that can safely be deferred.
+
+It was a good example of balancing **UX, technical design, scope creep, and shipping speed** instead of automatically building the most sophisticated solution.
