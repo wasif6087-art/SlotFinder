@@ -460,12 +460,34 @@ Handle these two issues -
 
 # August 22nd
 
-1) Scope deployment - what is it? how to do irt? what software to use? costs and benefits?
+1) Scope deployment - what is it? how to do it? what software to use? costs and benefits?
 (just get a general idea of the whole deployment thing cuz you've never done it before)
 
 2) what changes do i need to make to my whole project (a lot of it is configured to only run on my device)
 
 3) do i use AWS or not? what do student usually use to deploy projects like this? 
 
+---
 
-  
+# August 27th
+
+Deployment Steps-
+
+1. Put PostgreSQL in the cloud
+2. Put Spring Boot on a server
+3. Give Spring Boot the cloud DB credentials
+4. Verify the backend works publicly
+5. Deploy React
+6. Point React to the public backend URL
+7. Configure CORS
+8. Replace localhost unsubscribe links
+9. Test the entire application end-to-end
+
+The plan for #1 is basically:
+
+1. Create a small Amazon RDS PostgreSQL database.
+2. Point your locally running Spring Boot backend at it.
+3. Let Hibernate create the watch_request and notification tables.
+4. Create a test watch request.
+5. Verify that the row is actually stored in AWS.
+6. Once that works, Step 1 is done.
