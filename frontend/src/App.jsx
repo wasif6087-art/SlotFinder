@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
 import './App.css'
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
 // Custom Dropdown Component
 function Dropdown({ id, value, onChange, options, placeholder, disabled, className }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -84,7 +86,7 @@ function App() {
   
 
   useEffect(() => {
-    fetch('http://localhost:8080/advisors')
+    fetch(`${API_BASE_URL}/advisors`)
       .then(response => response.json())
       .then(data => {
         setAdvisors(data)
@@ -134,7 +136,7 @@ function App() {
         : advisor
     }
     console.log(watchRequest)
-    fetch('http://localhost:8080/watchrequests', {
+    fetch(`${API_BASE_URL}/watchrequests`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -172,7 +174,7 @@ function App() {
   }
 
   function handleUnsubscribe() {
-    fetch(`http://localhost:8080/unsubscribe/${unsubscribeToken}`)
+    fetch(`${API_BASE_URL}/unsubscribe/${unsubscribeToken}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to unsubscribe.')

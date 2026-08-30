@@ -471,7 +471,7 @@ Handle these two issues -
 
 # August 27th
 
-Deployment Steps-
+## Deployment Steps-
 
 1. Put PostgreSQL in the cloud
 2. Put Spring Boot on a server
@@ -483,7 +483,7 @@ Deployment Steps-
 8. Replace localhost unsubscribe links
 9. Test the entire application end-to-end
 
-The plan for #1 is basically:
+## The plan for #1 is basically:
 
 1. Create a small Amazon RDS PostgreSQL database.
 2. Point your locally running Spring Boot backend at it.
@@ -491,3 +491,31 @@ The plan for #1 is basically:
 4. Create a test watch request.
 5. Verify that the row is actually stored in AWS.
 6. Once that works, Step 1 is done.
+
+## Plan for #2,#3,#4:
+
+1. Choose the backend hosting approach and understand what EC2 vs Elastic Beanstalk actually means.
+2. Package SlotFinder’s Spring Boot backend into something AWS can run, most likely a .jar.
+3. Create the AWS backend environment that will run that jar.
+4. Deploy the Spring Boot app into that environment.
+5. Give the deployed backend its database connection settings for the RDS PostgreSQL instance.
+6. Allow the backend’s AWS network/security group to reach RDS on PostgreSQL port 5432.
+7. Start the backend and inspect logs to make sure Spring Boot boots successfully in AWS.
+8. Verify the backend publicly by hitting something like Swagger or a simple endpoint from your browser.
+9. Verify the deployed backend is actually using RDS, not some local database.
+10. Do a tiny end-to-end backend test and then mark Steps 2, 3, and 4 complete.
+
+## Plan for #5,#6,#7,#8,#9:
+
+1. Choose a hosting approach for the React/Vite frontend.
+2. Build the React app into production static files.
+3. Deploy those frontend files to AWS and get a public frontend URL.
+4. Replace localhost backend URLs in React with the Elastic Beanstalk backend URL.
+5. Rebuild and redeploy the frontend with the production backend URL.
+6. Update Spring Boot CORS so the deployed frontend origin is allowed.
+7. Replace any localhost-based unsubscribe links with production URLs.
+8. Verify frontend → backend requests work publicly.
+9. Create a real watch request from the deployed frontend and verify it reaches AWS RDS.
+10. Test the major user flows end-to-end: advisor loading, watch creation, notifications/email where possible, unsubscribe, and database persistence.
+11. Fix any production-only issues we discover.
+12. Once everything works, mark Deployment Steps 5–9 complete.

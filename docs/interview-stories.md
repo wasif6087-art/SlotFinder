@@ -502,3 +502,14 @@ I learned to distinguish between:
 - and a larger architectural improvement that can safely be deferred.
 
 It was a good example of balancing **UX, technical design, scope creep, and shipping speed** instead of automatically building the most sophisticated solution.
+
+---
+
+## Deployment -
+
+- “I deployed my Spring Boot backend using AWS Elastic Beanstalk, which provisioned and managed EC2 infrastructure underneath, and I connected it securely to RDS PostgreSQL”
+
+- I started getting REALLY curious about how RDS, S3, EC2 and all of these actually work
+
+- EC2 runs my code. RDS stores my structured relational data. S3 stores my files/objects.
+
