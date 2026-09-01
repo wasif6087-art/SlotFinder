@@ -10,7 +10,7 @@ import com.slotfinder.backend.models.ServiceAgent;
 import com.slotfinder.backend.services.ServiceAgentService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-@CrossOrigin(origins = "http://localhost:5173")
+
 @RestController
 @RequestMapping("/advisors")
 public class ServiceAgentController {

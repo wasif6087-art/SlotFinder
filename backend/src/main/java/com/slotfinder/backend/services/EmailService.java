@@ -46,7 +46,7 @@ public void sendAppointmentNotification(
     }
 
    String unsubscribeLink =
-    "http://localhost:5173/unsubscribe/" + unsubscribeToken;
+    "https://main.d3khqm2y4ubb0n.amplifyapp.com/unsubscribe/" + unsubscribeToken;
 
     message.setTo(email);
     message.setSubject("Slot Finder: Appointment Available");

@@ -4,7 +4,7 @@ import './App.css'
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 // Custom Dropdown Component
-function Dropdown({ id, value, onChange, options, placeholder, disabled, className }) {
+function Dropdown({ value, onChange, options, placeholder, disabled, className }) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef(null)
 
@@ -91,7 +91,7 @@ function App() {
       .then(data => {
         setAdvisors(data)
       })
-      .catch(error => {
+      .catch(() => {
         setAdvisorsError('Failed to fetch advisors.')
       })
       .finally(() => {
@@ -135,7 +135,6 @@ function App() {
         ? ''
         : advisor
     }
-    console.log(watchRequest)
     fetch(`${API_BASE_URL}/watchrequests`, {
       method: 'POST',
       headers: {
@@ -144,7 +143,6 @@ function App() {
       body: JSON.stringify(watchRequest)
     })
     .then((response) => {
-      console.log(response)
       if (response.ok) {
         setErrorMessage('')
         setSubmitted(true)
@@ -152,8 +150,7 @@ function App() {
         setErrorMessage('Something went wrong. Please try again.')
       }
     })
-    .catch((error) => {
-      console.log(error)
+    .catch(() => {
       setErrorMessage('Something went wrong. Please try again.')
     })
     .finally(() => {
@@ -181,13 +178,10 @@ function App() {
         }
         return response.text()
       })
-      .then((data) => {
-        console.log(data)
+      .then(() => {
         setUnsubscribed(true)
       })
-      .catch((error) => {
-        console.error(error)
-      })
+      .catch(() => undefined)
   }
 
   if (unsubscribeToken) {

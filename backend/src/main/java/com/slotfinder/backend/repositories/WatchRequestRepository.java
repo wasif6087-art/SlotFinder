@@ -12,6 +12,8 @@ public interface WatchRequestRepository extends JpaRepository<WatchRequest, Long
 
     List<WatchRequest> findByActiveTrue();
 
+    List<WatchRequest> findByEmailAndActiveTrue(String email);
+
     Optional<WatchRequest> findByUnsubscribeToken(String unsubscribeToken);
 
 }

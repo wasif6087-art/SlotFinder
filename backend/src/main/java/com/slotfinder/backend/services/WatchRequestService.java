@@ -82,8 +82,14 @@ public class WatchRequestService {
             return "No watch request found";
         }
 
-        request.setActive(false);
-        watchRequestRepository.save(request);
+        List<WatchRequest> activeRequests = watchRequestRepository
+                .findByEmailAndActiveTrue(request.getEmail());
+
+        for (WatchRequest activeRequest : activeRequests) {
+            activeRequest.setActive(false);
+        }
+
+        watchRequestRepository.saveAll(activeRequests);
 
         return "Watch request has been cancelled for " + request.getEmail();
     }
